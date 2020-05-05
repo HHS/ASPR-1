@@ -1,0 +1,71 @@
+triggers:
+  - id: Day 22 - SS Start
+    type: TIME
+    data:
+      defaultTime: 15
+  - id: Day 365 - SS End
+    type: TIME
+    data:
+      defaultTime: 365
+  - id: Day 32 - SIP Start
+    type: TIME
+    data:
+      defaultTime: 32
+  - id: Day 62 - SIP End
+    type: TIME
+    data:
+      defaultTime: 62
+  - id: Day 90 - Summer Start
+    type: TIME
+    data:
+      defaultTime: 90
+      repeats: 1
+      repeatInterval: 365
+  - id: Day 180 - Summer End
+    type: TIME
+    data:
+      defaultTime: 180
+      repeats: 1
+      repeatInterval: 365
+  - id: Day 32 - SIP Start and Repeat 21x 1 Week each Month after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 32
+      repeats: 21
+      repeatInterval: 30
+      repeatInitialPause: 58
+  - id: Day 62 - SIP End and Repeat 21x 1 Week each Month after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 62
+      repeats: 21
+      repeatInterval: 30
+      repeatInitialPause: 35
+  - id: Day 32 - SIP Start and Repeat 7x 1 Week each Month after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 32
+      repeats: 7
+      repeatInterval: 30
+      repeatInitialPause: 58
+  - id: Day 62 - SIP End and Repeat 7x 1 Week each Month after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 62
+      repeats: 7
+      repeatInterval: 30
+      repeatInitialPause: 35
+  - id: Day 32 - SIP Start and Repeat 11x 2 Weeks each 2 Months after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 32
+      repeats: 11
+      repeatInterval: 60
+      repeatInitialPause: 58
+  - id: Day 62 - SIP End and Repeat 11x 2 Weeks each 2 Months after 28-day Pause
+    type: TIME
+    data:
+      defaultTime: 62
+      repeats: 11
+      repeatInterval: 60
+      repeatInitialPause: 42

@@ -324,3 +324,9 @@ Temporary Items
 ###################################
 
 *.Rproj
+
+yaml generator/test-generate.yaml
+
+yaml generator/localOptions.yaml
+
+yaml generator/scenarioParameters.yaml

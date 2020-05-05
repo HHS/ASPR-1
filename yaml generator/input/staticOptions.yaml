@@ -1,0 +1,5 @@
+ageGroups: transmission/default-age-groups-5-classes.yaml
+includeExperimentColumnReport: yes
+displayExperimentColumns: no
+randomSeed: 8675309
+regions: population/tracts/tract-ids.csv

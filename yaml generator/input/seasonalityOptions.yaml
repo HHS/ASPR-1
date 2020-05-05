@@ -1,0 +1,5 @@
+seasonalityDeclineStart: 30.0
+seasonalityDeclineDuration: 60.0
+transmissionNadirDuration: 60.0
+transmissionInclineDuration: 60.0
+relativeSeasonalityTransmission: 0.8

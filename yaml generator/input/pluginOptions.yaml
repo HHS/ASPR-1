@@ -1,0 +1,3 @@
+infectionPlugin: GAMMA
+behaviorPlugin: COMBINATION_BEHAVIOR
+seedingPlugin: EXPONENTIAL
