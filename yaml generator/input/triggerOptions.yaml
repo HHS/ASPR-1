@@ -27,7 +27,7 @@ triggers:
   - id: "Phase 1 Start"
     type: TIME
     data:
-      defaultTime: 30
+      defaultTime: 60
   - id: "Phase 1 End"
     type: TIME
     data:
@@ -35,11 +35,15 @@ triggers:
   - id: "Phase 2 Start"
     type: TIME
     data:
-      defaultTime: 30
+      defaultTime: 60
   - id: "Phase 2 End"
     type: TIME
     data:
       defaultTime: 75
+  - id: "Schools Reopen - Day 60"
+    type: TIME
+    data:
+      defaultTime: 60
 
   - id: Day 90 - Summer Start
     type: TIME
