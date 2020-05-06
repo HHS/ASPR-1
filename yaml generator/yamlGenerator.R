@@ -46,36 +46,61 @@ alsoModelNoSeasonality <- TRUE
 mitigationDefinition = lst(
   
   # Standard mitigation scenarios
-  `Mitigation Parameters` = tibble(
-    NAME = c("Moderate Mitigation", "Unmitigated"),
-    ISOLATION_HYGIENE_START = c("Day 22 - SS Start", ""), 
-    ISOLATION_HYGIENE_END = c("", ""),
-    TELEWORK_START = c("Day 22 - SS Start", ""),
-    TELEWORK_END = c("", ""),
-    LOCATION_INFECTION_REDUCTION_START = c("Day 22 - SS Start", ""), 
-    LOCATION_INFECTION_REDUCTION_END = c("", ""),
-    SHELTER_IN_PLACE_START = c("Day 32 - SIP Start", ""), 
-    SHELTER_IN_PLACE_END = c("Day 62 - SIP End", ""),
+  `Mitigation Parameters` = lst(
+    NAME = c("Phase 0", "Phase 1"),
     
-    SCHOOL_CLOSURE_START = c("Day 22 - SS Start", "Day 22 - SS Start"),
-    SCHOOL_CLOSURE_END = c("Day 90 - Summer Start", "Day 90 - Summer Start")
+    ISOLATION_HYGIENE_START = c("Phase 0 Start", "Phase 1 Start"), 
+    ISOLATION_HYGIENE_END = c("Phase 0 End", "Phase 1 End"),
+    
+    TELEWORK_START = c("Phase 0 Start", "Phase 1 Start"),
+    TELEWORK_END = c("Phase 0 End", "Phase 1 End"),
+    
+    LOCATION_INFECTION_REDUCTION_START = c("Phase 0 Start", "Phase 1 Start"), 
+    LOCATION_INFECTION_REDUCTION_END = c("Phase 0 End", "Phase 1 End"),
+    
+    SHELTER_IN_PLACE_START = c("Phase 0 Start", ""), 
+    SHELTER_IN_PLACE_END = c("Phase 0 End", ""),
+    
+    SCHOOL_CLOSURE_START = c("Phase 0 Start", "Phase 1 Start"),
+    SCHOOL_CLOSURE_END = c("Day 90 - Summer Start", "Day 90 - Summer Start"),
+    
+    FRACTION_OF_WORKPLACES_WITH_TELEWORK_EMPLOYEES = c(0.75, 0.5),
+    FRACTION_OF_EMPLOYEES_WHO_TELEWORK_WHEN_ABLE = c(0.85, 0.9),
+    
+    LOCATION_INFECTION_REDUCTION = list(
+      lst(
+        PRESCHOOL = lst(GLOBAL = 0.25),
+        CHILD = lst(SCHOOL = 0.05, GLOBAL =  0.25, WORK = 0.05),
+        ADULT = lst(SCHOOL = 0.1, GLOBAL = 0.25, WORK = 0.1),
+        OLDER_ADULT = lst(SCHOOL = 0.1, GLOBAL = 0.25, WORK = 0.1),
+        SENIOR = lst(SCHOOL = 0.1, GLOBAL = 0.5, WORK = 0.5)
+      ),
+      lst(
+        PRESCHOOL = lst(GLOBAL = 0.5),
+        CHILD = lst(SCHOOL = 0.05, GLOBAL = 0.5, WORK = 0.05),
+        ADULT = lst(SCHOOL = 0.1, GLOBAL = 0.5, WORK = 0.3),
+        OLDER_ADULT = lst(SCHOOL = 0.1, GLOBAL = 0.5, WORK = 0.3),
+        SENIOR = lst(SCHOOL = 0.1, GLOBAL = 0.75, WORK = 0.75)
+      )
+    )
   ),
   
   # Infection targeting ratio
-  `Infection targeting ratio` = tibble(
+  `Infection targeting ratio` = lst(
     NAME = c("Random", "Low", "Mid", "High"),
     INFECTION_TARGETING_RATIO = c(1, 3, 10, 30)
   ),
   
   # Random testing frequency
-  `Random testing frequency` = tibble(
+  `Random testing frequency` = lst(
     NAME = c(0.001, 0.005, 0.01),
     FRACTION_OF_POPULATION_TESTED_DAILY = c(0.001, 0.005, 0.01)
   )
 )
-  
-print(mitigationDefinition)
 
+specifiedCovariedParameters <- unique(unname(unlist(lapply(mitigationDefinition, names))))
+
+  
 # Setup -------------------------------------------------------------------
 
 plugin_options <- read_yaml("input/pluginOptions.yaml")
@@ -146,6 +171,18 @@ if (seasonality) {
 }
 
 
+
+# Roll up scenarios -------------------------------------------------------
+
+scenarios <- c(scenarios,
+               read_yaml("input/mitigationOptions.yaml"),
+               read_yaml("input/miscConfigOptions.yaml"),
+               read_yaml("input/seedingOptions.yaml"))
+
+# Remove any scenarios that are being overwritten in the covariation mitigation section
+scenarios <- scenarios[!(names(scenarios) %in% specifiedCovariedParameters)]
+
+
 # Mitigation --------------------------------------------------------------
 
 mitigationPropertyGroup <- list()
@@ -176,12 +213,21 @@ loadMitigation <- function(mitigationPropertyName,
 
 for (mitigationI in 1:length(mitigationDefinition)) {
   mitigation = mitigationDefinition[[mitigationI]]
-  for (i in 1:nrow(mitigation)) {
+  
+  len <- length(mitigation$NAME)
+  for (par in 1:length(mitigation)) {
+    if (length(mitigation[[par]]) != len) {
+      print("Error in length of mitigation covariation")
+      stop()
+    }
+  }
+    
+  for (i in 1:length(mitigation$NAME)) {
     loadMitigation(
       names(mitigationDefinition)[[mitigationI]],
       mitigation$NAME[[i]], 
-      names(select(mitigation, -NAME)),
-      slice(select(mitigation, -NAME), i)
+      setdiff(names(mitigation), "NAME"),
+      lapply(mitigation[names(mitigation) != "NAME"], function(x) x[[i]])
     )
   }
 }
@@ -203,13 +249,7 @@ reconstructedYaml <- c(
   plugin_options,
   read_yaml("input/triggerOptions.yaml"),
   propertyGroups = list(propertyGroups),
-  #TODO - check this - I don't think it is listed properly
-  scenarios = list(#unname(
-    c(scenarios,
-      read_yaml("input/mitigationOptions.yaml"),
-      read_yaml("input/miscConfigOptions.yaml"),
-      read_yaml("input/seedingOptions.yaml")))
-  #))
+  scenarios = list(scenarios)
 )
 
 # Write YAML file ---------------------------------------------------------

@@ -15,6 +15,32 @@ triggers:
     type: TIME
     data:
       defaultTime: 62
+
+  - id: "Phase 0 Start"
+    type: TIME
+    data:
+      defaultTime: 15
+  - id: "Phase 0 End"
+    type: TIME
+    data:
+      defaultTime: 365
+  - id: "Phase 1 Start"
+    type: TIME
+    data:
+      defaultTime: 30
+  - id: "Phase 1 End"
+    type: TIME
+    data:
+      defaultTime: 75
+  - id: "Phase 2 Start"
+    type: TIME
+    data:
+      defaultTime: 30
+  - id: "Phase 2 End"
+    type: TIME
+    data:
+      defaultTime: 75
+
   - id: Day 90 - Summer Start
     type: TIME
     data:
