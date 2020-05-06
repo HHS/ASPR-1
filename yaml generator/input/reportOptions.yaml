@@ -1,0 +1,7 @@
+reports:
+  - report: INCIDENCE_REPORT
+    period: DAILY
+    regionAggregationLevel: COUNTY
+  - report: INCIDENCE_REPORT_BY_AGE
+    period: DAILY
+    regionAggregationLevel: COUNTY

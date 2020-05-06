@@ -1,0 +1,9 @@
+RADIATION_FLOW_DATA_PATH: population/tracts/radiation_flow_id/
+TRANSMISSION_STRUCTURE: transmission/default-transmission-5-classes.yaml
+HOSPITAL_DATA_FILE: hospitals/hospitals.csv
+HOSPITAL_BED_STAFF_RATIO: 5.0
+HOSPITAL_BED_OCCUPANCY:
+  - 0.8
+REGION_WORKER_FLOW_DATA_FILE: hospitals/region-worker-flow.csv
+HOSPITALIZATION_MAX_RADIUS_KM: 100.0
+MAX_SIMULATION_LENGTH: 700.0

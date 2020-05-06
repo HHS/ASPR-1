@@ -323,6 +323,10 @@ Temporary Items
 # END MacOS
 ###################################
 
-*.yaml
-
 *.Rproj
+
+yaml generator/test-generate.yaml
+
+yaml generator/localOptions.yaml
+
+yaml generator/scenarioParameters.yaml
